@@ -6,7 +6,7 @@ import { usePrevious } from "./hooks/usePrevious";
 import React from "react";
 import { useFavicon } from "./hooks/useFavicon";
 import { useCopyToClipboard } from "./hooks/useCopyToClipboard";
-import { useInterval } from "./hooks/useInterval";
+// import { useInterval } from "./hooks/useInterval";
 import { useCounter } from "./hooks/useCounter";
 
 function App() {
@@ -23,19 +23,19 @@ function App() {
   );
   useFavicon(favicon);
   const [copiedText, copyToClipboard] = useCopyToClipboard();
-  const [index, setIndex] = React.useState(0);
+  // const [index, setIndex] = React.useState(0);
   const [countv2, { increment, decrement, set, reset }] = useCounter(5, {
     min: 5,
     max: 10,
   });
 
-  const clear = useInterval(() => {
-    setIndex(index + 1);
-  }, 1000);
+  // const clear = useInterval(() => {
+  //   setIndex(index + 1);
+  // }, 1000);
 
-  const handleStop = () => {
-    clear();
-  };
+  // const handleStop = () => {
+  //   clear();
+  // };
 
   const handleClick = () => {
     function getNewColor() {
@@ -131,11 +131,13 @@ function App() {
       <button onClick={() => copyToClipboard("test")}>Copy to clipboard</button>
       <p>Copied text is {copiedText}</p>
       <hr />
+      {/*
       <h3>use Interval</h3>
       <span>Index is {index}</span>
       <button onClick={handleStop}>Stop</button>
+      */}
       <hr />
-      <h1>UseCounter</h1>
+      <h3>UseCounter</h3>
       <h6>with optional min / max</h6>
       <button disabled={countv2 >= 10} className="link" onClick={increment}>
         Increment
@@ -143,13 +145,16 @@ function App() {
       <button disabled={countv2 <= 5} className="link" onClick={decrement}>
         Decrement
       </button>
-      <button className="link" onClick={() => set(6)}>
-        Set to 6
+      <button className="link" onClick={() => set(7)}>
+        Set to 7
       </button>
       <button className="link" onClick={reset}>
         Reset
       </button>
       <p>{countv2}</p>
+
+      <hr />
+      <h3>Use lock body scroll</h3>
     </div>
   );
 }

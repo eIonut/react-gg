@@ -1,26 +1,76 @@
-import React from "react";
+import * as React from "react";
 
-function reducer(state, action) {
-  switch (action.type) {
-    case "increment":
-      return state + 1;
-    case "decrement":
-      return state - 1;
-    case "set":
-      return action.set;
-    case "reset":
-      return action.default;
-    default:
-      return state;
+function useCounter(startingValue = 0, options = {}) {
+  const { min, max } = options;
+
+  if (typeof min === "number" && startingValue < min) {
+    throw new Error(
+      `Your starting value of ${startingValue} is less than your min of ${min}.`
+    );
   }
+
+  if (typeof max === "number" && startingValue > max) {
+    throw new Error(
+      `Your starting value of ${startingValue} is greater than your max of ${max}.`
+    );
+  }
+
+  const [count, setCount] = React.useState(startingValue);
+
+  const increment = React.useCallback(() => {
+    setCount((c) => {
+      const nextCount = c + 1;
+
+      if (typeof max === "number" && nextCount > max) {
+        return c;
+      }
+
+      return nextCount;
+    });
+  }, [max]);
+
+  const decrement = React.useCallback(() => {
+    setCount((c) => {
+      const nextCount = c - 1;
+
+      if (typeof min === "number" && nextCount < min) {
+        return c;
+      }
+
+      return nextCount;
+    });
+  }, [min]);
+
+  const set = React.useCallback(
+    (nextCount) => {
+      setCount((c) => {
+        if (typeof max === "number" && nextCount > max) {
+          return c;
+        }
+
+        if (typeof min === "number" && nextCount < min) {
+          return c;
+        }
+
+        return nextCount;
+      });
+    },
+    [max, min]
+  );
+
+  const reset = React.useCallback(() => {
+    setCount(startingValue);
+  }, [startingValue]);
+
+  return [
+    count,
+    {
+      increment,
+      decrement,
+      set,
+      reset,
+    },
+  ];
 }
-
-const useCounter = (startingNumber, { min, max }) => {
-  const [state, dispatch] = React.useReducer(reducer, { startingNumber });
-
-  if (startingNumber < min || startingNumber > max) {
-    throw new Error("Start is outside the range");
-  }
-};
 
 export { useCounter };

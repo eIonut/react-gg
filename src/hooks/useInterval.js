@@ -1,18 +1,20 @@
-import * as React from "react";
-function useInterval(cb, ms) {
-  const id = React.useRef(null);
-  const onInterval = React.useEffectEvent(cb);
+// import { experimental_useEffectEvent as useEffectEvent } from "react";
 
-  const handleClearInterval = React.useCallback(() => {
-    window.clearInterval(id.current);
-  }, []);
+// import * as React from "react";
+// function useInterval(cb, ms) {
+//   const id = React.useRef(null);
+//   const onInterval = useEffectEvent(cb);
 
-  React.useEffect(() => {
-    id.current = window.setInterval(onInterval, ms);
-    return handleClearInterval;
-  }, [ms, handleClearInterval, onInterval]);
+//   const handleClearInterval = React.useCallback(() => {
+//     window.clearInterval(id.current);
+//   }, []);
 
-  return handleClearInterval;
-}
+//   React.useEffect(() => {
+//     id.current = window.setInterval(onInterval, ms);
+//     return handleClearInterval;
+//   }, [ms, handleClearInterval, onInterval]);
 
-export { useInterval };
+//   return handleClearInterval;
+// }
+
+// export { useInterval };
