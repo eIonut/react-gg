@@ -8,6 +8,8 @@ import { useFavicon } from "./hooks/useFavicon";
 import { useCopyToClipboard } from "./hooks/useCopyToClipboard";
 // import { useInterval } from "./hooks/useInterval";
 import { useCounter } from "./hooks/useCounter";
+import { useQueue } from "./hooks/useQueue";
+import { QueueDemo } from "./components/Queue";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -28,6 +30,8 @@ function App() {
     min: 5,
     max: 10,
   });
+
+  const { add, remove, clear, first, last, size, queue } = useQueue([1, 2, 3]);
 
   // const clear = useInterval(() => {
   //   setIndex(index + 1);
@@ -155,6 +159,22 @@ function App() {
 
       <hr />
       <h3>Use lock body scroll</h3>
+
+      <hr />
+      <h3>Use queue</h3>
+      <header>
+        <h1>UseQueue</h1>
+        <button className="link" onClick={() => add((last || 0) + 1)}>
+          Add
+        </button>
+        <button disabled={size === 0} className="link" onClick={remove}>
+          Remove
+        </button>
+        <button disabled={size === 0} className="link" onClick={clear}>
+          Clear
+        </button>
+      </header>
+      <QueueDemo queue={queue} size={size} first={first} last={last} />
     </div>
   );
 }
