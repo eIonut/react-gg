@@ -1,7 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { experimental_useEffectEvent as useEffectEvent } from "react";
 
-const useTimeout = () => {
-  return <div></div>;
+const useTimeout = (cb, ms) => {
+  const timeoutId = React.useRef(null);
+  const onTimeout = useEffectEvent(cb);
+
+  const handleClearTimeout = React.useCallback(() => {
+    window.clearTimeout(timeoutId.current);
+  }, [timeoutId]);
+
+  useEffect(() => {
+    timeoutId.current = window.setTimeout(onTimeout, ms);
+    return handleClearTimeout;
+  }, [ms, handleClearTimeout]);
+
+  return handleClearTimeout;
 };
 
-export default useTimeout;
+export { useTimeout };

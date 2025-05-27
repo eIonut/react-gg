@@ -6,10 +6,11 @@ import { usePrevious } from "./hooks/usePrevious";
 import React from "react";
 import { useFavicon } from "./hooks/useFavicon";
 import { useCopyToClipboard } from "./hooks/useCopyToClipboard";
-// import { useInterval } from "./hooks/useInterval";
+import { useInterval } from "./hooks/useInterval";
 import { useCounter } from "./hooks/useCounter";
 import { useQueue } from "./hooks/useQueue";
 import { QueueDemo } from "./components/Queue";
+import Timeout from "./components/Timeout";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -25,21 +26,29 @@ function App() {
   );
   useFavicon(favicon);
   const [copiedText, copyToClipboard] = useCopyToClipboard();
-  // const [index, setIndex] = React.useState(0);
+  const [index, setIndex] = React.useState(0);
   const [countv2, { increment, decrement, set, reset }] = useCounter(5, {
     min: 5,
     max: 10,
   });
 
-  const { add, remove, clear, first, last, size, queue } = useQueue([1, 2, 3]);
+  const {
+    add,
+    remove,
+    clear: clearQueue,
+    first,
+    last,
+    size,
+    queue,
+  } = useQueue([1, 2, 3]);
 
-  // const clear = useInterval(() => {
-  //   setIndex(index + 1);
-  // }, 1000);
+  const clear = useInterval(() => {
+    setIndex(index + 1);
+  }, 1000);
 
-  // const handleStop = () => {
-  //   clear();
-  // };
+  const handleStop = () => {
+    clear();
+  };
 
   const handleClick = () => {
     function getNewColor() {
@@ -135,11 +144,11 @@ function App() {
       <button onClick={() => copyToClipboard("test")}>Copy to clipboard</button>
       <p>Copied text is {copiedText}</p>
       <hr />
-      {/*
+
       <h3>use Interval</h3>
       <span>Index is {index}</span>
       <button onClick={handleStop}>Stop</button>
-      */}
+
       <hr />
       <h3>UseCounter</h3>
       <h6>with optional min / max</h6>
@@ -158,9 +167,6 @@ function App() {
       <p>{countv2}</p>
 
       <hr />
-      <h3>Use lock body scroll</h3>
-
-      <hr />
       <h3>Use queue</h3>
       <header>
         <h1>UseQueue</h1>
@@ -170,11 +176,15 @@ function App() {
         <button disabled={size === 0} className="link" onClick={remove}>
           Remove
         </button>
-        <button disabled={size === 0} className="link" onClick={clear}>
+        <button disabled={size === 0} className="link" onClick={clearQueue}>
           Clear
         </button>
       </header>
       <QueueDemo queue={queue} size={size} first={first} last={last} />
+
+      <hr />
+      <h3>Use Timeout</h3>
+      <Timeout />
     </div>
   );
 }
