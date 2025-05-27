@@ -10,6 +10,7 @@ import { useInterval } from "./hooks/useInterval";
 import { useCounter } from "./hooks/useCounter";
 import { useQueue } from "./hooks/useQueue";
 import { QueueDemo } from "./components/Queue";
+import useWindowSize from "./hooks/useWindowSize";
 import Timeout from "./components/Timeout";
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
     min: 5,
     max: 10,
   });
+  const windowSize = useWindowSize();
 
   const {
     add,
@@ -185,6 +187,10 @@ function App() {
       <hr />
       <h3>Use Timeout</h3>
       <Timeout />
+
+      <h3>Use window size</h3>
+      <p>{windowSize.height}</p>
+      <p>{windowSize.width}</p>
     </div>
   );
 }
