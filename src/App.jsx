@@ -9,9 +9,11 @@ import { useCopyToClipboard } from "./hooks/useCopyToClipboard";
 import { useInterval } from "./hooks/useInterval";
 import { useCounter } from "./hooks/useCounter";
 import { useQueue } from "./hooks/useQueue";
+import { useList } from "./hooks/useList";
 import { QueueDemo } from "./components/Queue";
 import useWindowSize from "./hooks/useWindowSize";
 import Timeout from "./components/Timeout";
+import { useVisibilityChange } from "./hooks/useVisibilityChange";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -33,7 +35,6 @@ function App() {
     max: 10,
   });
   const windowSize = useWindowSize();
-
   const {
     add,
     remove,
@@ -68,6 +69,20 @@ function App() {
     const colors = ["green", "blue", "purple", "red", "pink"];
     return colors[Math.floor(Math.random() * colors.length)];
   }
+
+  const documentVisible = useVisibilityChange();
+  const [tabAwayCount, setTabAwayCount] = React.useState(0);
+
+  React.useEffect(() => {
+    if (documentVisible === false) {
+      setTabAwayCount((c) => c + 1);
+    }
+  }, [documentVisible]);
+
+  const [
+    list,
+    { set: setList, push, removeAt, insertAt, updateAt, clear: clearList },
+  ] = useList(["First", "Second", "Third"]);
 
   return (
     <div
@@ -191,6 +206,39 @@ function App() {
       <h3>Use window size</h3>
       <p>{windowSize.height}</p>
       <p>{windowSize.width}</p>
+
+      <hr />
+      <h3>Use visibility Change</h3>
+      <div>Tab Away Count: {tabAwayCount}</div>
+
+      <hr />
+      <h3>use List</h3>
+
+      <div>
+        {list.map((el, index) => (
+          <p key={index}>{el}</p>
+        ))}
+      </div>
+      <button
+        disabled={list.length < 1}
+        className="link"
+        onClick={() => insertAt(1, "woo")}
+      >
+        Insert After First
+      </button>
+      <button
+        disabled={list.length < 2}
+        className="link"
+        onClick={() => removeAt(1)}
+      >
+        Remove Second Item
+      </button>
+      <button className="link" onClick={() => setList([1, 2, 3])}>
+        Reset
+      </button>
+      <button className="link" onClick={() => clearList()}>
+        Clear
+      </button>
     </div>
   );
 }
